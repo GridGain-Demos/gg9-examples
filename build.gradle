@@ -1,0 +1,138 @@
+/*
+ *  Copyright (C) GridGain Systems. All Rights Reserved.
+ *  _________        _____ __________________        _____
+ *  __  ____/___________(_)______  /__  ____/______ ____(_)_______
+ *  _  / __  __  ___/__  / _  __  / _  / __  _  __ `/__  / __  __ \
+ *  / /_/ /  _  /    _  /  / /_/ /  / /_/ /  / /_/ / _  /  _  / / /
+ *  \____/   /_/     /_/   \_,__/   \____/   \__,_/  /_/   /_/ /_/
+ */
+
+import javax.naming.ConfigurationException
+
+plugins {
+    alias(libs.plugins.nexusPublishing) apply true
+}
+
+group = 'org.gridgain'
+version = "1.0-SNAPSHOT"
+
+apply from: "$rootDir/buildscripts/java-core.gradle"
+apply from: "$rootDir/buildscripts/java-junit5.gradle"
+apply from: "$rootDir/buildscripts/java-integration-test.gradle"
+apply from: "$rootDir/buildscripts/publishing.gradle"
+
+description = 'gg9-examples'
+
+ext {
+    configurationInstructions = """
+Add the following content in your <HOME>/.gradle/gradle.properties, replacing values appropriately:
+```
+gridgain_license=<PATH_TO_GRIDGAIN_LICENSE>
+```
+Alternatively you can set environment variable GRIDGAIN_LICENSE with the path to file.
+"""
+}
+
+File findGridgainLicense() {
+    def projectPath = new File(projectDir, "config/gridgain-license.conf").absolutePath
+    String pathFromProperties = project.properties['gridgain_license']
+    def pathFromEnvironment = System.getenv('GRIDGAIN_LICENSE')
+
+    return [projectPath, pathFromProperties, pathFromEnvironment].stream()
+        .filter { it != null }
+        .map { new File(it) }
+        .filter { it.isFile() }
+        .findFirst()
+        .orElseThrow {
+            new ConfigurationException("Gridgain license file is not found: " + configurationInstructions)
+        }
+}
+
+
+ext {
+    repos = [
+        'gridgain-snapshot': 'https://gridgainsystems.com/nexus/content/repositories/gridgain-snapshots/',
+        'gridgain-staging' : 'https://gridgainsystems.com/nexus/service/local/'
+    ]
+    extraJvmArgs = [
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-opens=java.base/java.nio=ALL-UNNAMED",
+            "--add-opens=java.base/java.math=ALL-UNNAMED",
+            "--add-opens=java.base/java.util=ALL-UNNAMED",
+            "--add-opens=java.base/java.time=ALL-UNNAMED",
+            "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
+            "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+            "-Dio.netty.tryReflectionSetAccessible=true"
+    ]
+}
+
+tasks.withType(Test).configureEach {
+    defaultCharacterEncoding = 'UTF-8'
+
+    jvmArgs += extraJvmArgs
+
+    doFirst {
+        environment 'GRIDGAIN_LICENSE', findGridgainLicense().absolutePath
+    }
+}
+
+tasks.withType(Sign) {
+    enabled = project.hasProperty('signing.keyId')
+        && project.hasProperty('signing.password')
+        && project.hasProperty('signing.secretKeyRingFile')
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repository.apache.org/snapshots')
+    }
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+    maven {
+        name = "gridgain"
+        url = uri("https://maven.gridgain.com/nexus/content/repositories/external")
+    }
+}
+
+nexusPublishing  {
+    repositories {
+        sonatype {
+            nexusUrl = uri(repos['gridgain-staging'])
+            snapshotRepositoryUrl = uri(repos['gridgain-snapshot'])
+            stagingProfileId = 'b4719b1e52448d'
+            username = project.properties["staging_user"]
+            password = project.properties["staging_password"]
+        }
+    }
+}
+
+dependencies {
+    implementation libs.gridgain.api
+    implementation libs.gridgain.client
+    implementation libs.gridgain.runner
+    implementation libs.gridgain.jdbc
+    implementation libs.h2
+    implementation libs.gridgain.jdbc.cache.store
+    implementation libs.jetbrains.annotations
+
+    integrationTestImplementation libs.gridgain.api
+    integrationTestImplementation libs.gridgain.client
+    integrationTestImplementation libs.gridgain.runner
+    integrationTestImplementation libs.gridgain.jdbc
+    integrationTestImplementation libs.typesafe.config
+    integrationTestImplementation libs.gridgain.core
+    integrationTestImplementation libs.gridgain.storage.page.memory
+    integrationTestImplementation libs.gridgain.page.memory
+    integrationTestImplementation libs.gridgain.network
+    integrationTestImplementation libs.gridgain.storage.api
+    integrationTestImplementation libs.gridgain.storage.rocksdb
+    integrationTestImplementation libs.gridgain.configuration
+    integrationTestImplementation libs.hamcrest.core
+    integrationTestImplementation libs.jetbrains.annotations
+}

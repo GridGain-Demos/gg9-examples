@@ -1,0 +1,88 @@
+/*
+ *  Copyright (C) GridGain Systems. All Rights Reserved.
+ *  _________        _____ __________________        _____
+ *  __  ____/___________(_)______  /__  ____/______ ____(_)_______
+ *  _  / __  __  ___/__  / _  __  / _  / __  _  __ `/__  / __  __ \
+ *  / /_/ /  _  /    _  /  / /_/ /  / /_/ /  / /_/ / _  /  _  / / /
+ *  \____/   /_/     /_/   \_,__/   \____/   \__,_/  /_/   /_/ /_/
+ */
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+apply plugin: 'java-library'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withSourcesJar()
+    withJavadocJar()
+}
+
+test {
+    finalizedBy(jacocoTestReport)
+}
+
+processResources {
+    filesMatching('**/*.properties') {
+        filter { String line ->
+            line.replace("\${project.version}", project.version)
+        }
+    }
+}
+
+checkstyle {
+    toolVersion = libs.versions.checkstyleTool.get()
+    ignoreFailures = false
+    showViolations = true
+    maxWarnings = 0
+    configFile = file("$rootDir/check-rules/checkstyle-rules.xml")
+    configProperties = [
+            "checkstyle.header.file" : file("$rootDir/check-rules/APACHE_LICENSE.txt"),
+            "org.checkstyle.google.suppressionfilter.config" : file("$rootDir/check-rules/checkstyle-suppressions.xml")
+    ]
+}
+
+tasks.withType(Checkstyle) {
+    excludes = ["**/generated-source/**",
+                "**/generated/**",
+                "com/facebook/presto/bytecode/**/*",
+                "org/apache/ignite/raft/jraft/**/*"]
+    reports {
+        xml.required = false
+        html {
+            required = true
+            outputLocation = file("$rootDir/build/reports/checkstyle/${project.name}.html")
+        }
+
+    }
+}
+
+javadoc {
+    exclude 'org/apache/ignite/internal/**'
+    exclude 'org/apache/ignite/raft/jraft/**'
+    exclude 'org/apache/calcite/plan/volcano/**'
+    exclude 'com/facebook/presto/**'
+}
+
+javadoc.dependsOn compileJava
+
+jacoco {
+    toolVersion = libs.versions.jacocoTool.get()
+}
+
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required = false
+        html.required = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['org/apache/calcite/**/*'])
+        }))
+    }
+}
