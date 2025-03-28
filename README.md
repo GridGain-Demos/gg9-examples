@@ -8,20 +8,13 @@ Examples are shipped as a Gradle module, so to start running you simply need
 to import the provided `build.gradle` file into your favourite IDE.
 
 To run tests you need to provide a valid gridgain licence.
-To do that edit the file `$HOME/.gradle/gradle.properties` adding the following content:
+To do that edit the file `$HOME/gradle.properties` adding the following content:
 
 ```properties
 gridgain_license=<PATH_TO/gridgain_license.conf>
 ```
 
 The following examples are included:
-* `RecordViewExample` - demonstrates the usage of the `org.apache.ignite.table.RecordView` API
-* `KeyValueViewExample` - demonstrates the usage of the `org.apache.ignite.table.KeyValueView` API
-* `SqlJdbcExample` - demonstrates the usage of the Apache Ignite JDBC driver.
-* `SqlApiExample` - demonstrates the usage of the Java API for SQL.
-* `VolatilePageMemoryStorageExample` - demonstrates the usage of the PageMemory storage engine configured with an in-memory data region.
-* `PersistentPageMemoryStorageExample` - demonstrates the usage of the PageMemory storage engine configured with a persistent data region.
-* `RocksDbStorageExample` - demonstrates the usage of the RocksDB storage engine.
 * `KeyValueViewDataStreamerExample` - demonstrates the usage of the `DataStreamerTarget#streamData(Publisher, DataStreamerOptions)` API
   with the `KeyValueView`.
 * `KeyValueViewPojoDataStreamerExample` - demonstrates the usage of the `DataStreamerTarget#streamData(Publisher, DataStreamerOptions)` API
