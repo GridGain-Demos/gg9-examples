@@ -9,13 +9,31 @@
 
 package org.apache.ignite.example;
 
+import org.apache.ignite.IgniteServer;
+import org.apache.ignite.deployment.version.Version;
+import org.apache.ignite.internal.app.IgniteImpl;
+import org.apache.ignite.internal.app.IgniteServerImpl;
+import org.apache.ignite.internal.deployunit.DeploymentUnit;
+import org.apache.ignite.internal.deployunit.InitialDeployMode;
+import org.apache.ignite.internal.deployunit.NodesToDeploy;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.WRITE;
+import static org.apache.ignite.example.CompletableFutureMatcher.willBe;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Map;
 
 /**
  * Example test utilities.
@@ -88,6 +106,48 @@ public class ExampleTestUtils {
 
         for (String single : expected) {
             assertThat(captured, containsString(single));
+        }
+    }
+
+    /**
+     * Deploys dummy unit.
+     *
+     * @param id Deployment unit id.
+     * @param workDir Work directory.
+     * @param node Node.
+     * @throws IOException If failed.
+     */
+    public static void deployDummyUnit(String id, Path workDir, IgniteServer node) throws IOException {
+        Path dummyFile = workDir.resolve("dummy.txt");
+
+        fillDummyFile(dummyFile, 4);
+
+        try (InputStream inputStream = Files.newInputStream(dummyFile)) {
+            DeploymentUnit unit = new DeploymentUnit(Map.of(dummyFile.getFileName().toString(), inputStream));
+
+            NodesToDeploy nodesToDeploy = new NodesToDeploy(InitialDeployMode.MAJORITY);
+
+            IgniteImpl ignite = ((IgniteServerImpl) node).igniteImpl();
+
+            assertThat(ignite.deployment().deployAsync(id, Version.parseVersion("1.0.0"), unit,
+                    nodesToDeploy), willBe(true));
+        }
+    }
+
+    /**
+     * Generate file with dummy content with provided size.
+     *
+     * @param file File path.
+     * @param fileSize File size in bytes.
+     * @throws IOException if an I/O error is thrown.
+     */
+    public static void fillDummyFile(Path file, long fileSize) throws IOException {
+        try (SeekableByteChannel channel = Files.newByteChannel(file, WRITE, CREATE)) {
+            channel.position(fileSize - 4);
+
+            ByteBuffer buf = ByteBuffer.allocate(4).putInt(2);
+            buf.rewind();
+            channel.write(buf);
         }
     }
 }

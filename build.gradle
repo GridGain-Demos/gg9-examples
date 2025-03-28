@@ -9,23 +9,18 @@
 
 import javax.naming.ConfigurationException
 
-plugins {
-    alias(libs.plugins.nexusPublishing) apply true
-}
-
 group = 'org.gridgain'
 version = "1.0-SNAPSHOT"
 
 apply from: "$rootDir/buildscripts/java-core.gradle"
 apply from: "$rootDir/buildscripts/java-junit5.gradle"
 apply from: "$rootDir/buildscripts/java-integration-test.gradle"
-apply from: "$rootDir/buildscripts/publishing.gradle"
 
 description = 'gg9-examples'
 
 ext {
     configurationInstructions = """
-Add the following content in your <HOME>/.gradle/gradle.properties, replacing values appropriately:
+Add the following content in your <HOME>/gradle.properties, replacing values appropriately:
 ```
 gridgain_license=<PATH_TO_GRIDGAIN_LICENSE>
 ```
@@ -50,10 +45,6 @@ File findGridgainLicense() {
 
 
 ext {
-    repos = [
-        'gridgain-snapshot': 'https://gridgainsystems.com/nexus/content/repositories/gridgain-snapshots/',
-        'gridgain-staging' : 'https://gridgainsystems.com/nexus/service/local/'
-    ]
     extraJvmArgs = [
             "--add-opens=java.base/java.lang=ALL-UNNAMED",
             "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
@@ -80,12 +71,6 @@ tasks.withType(Test).configureEach {
     }
 }
 
-tasks.withType(Sign) {
-    enabled = project.hasProperty('signing.keyId')
-        && project.hasProperty('signing.password')
-        && project.hasProperty('signing.secretKeyRingFile')
-}
-
 repositories {
     mavenLocal()
     maven {
@@ -100,21 +85,10 @@ repositories {
     }
 }
 
-nexusPublishing  {
-    repositories {
-        sonatype {
-            nexusUrl = uri(repos['gridgain-staging'])
-            snapshotRepositoryUrl = uri(repos['gridgain-snapshot'])
-            stagingProfileId = 'b4719b1e52448d'
-            username = project.properties["staging_user"]
-            password = project.properties["staging_password"]
-        }
-    }
-}
-
 dependencies {
     implementation libs.gridgain.api
     implementation libs.gridgain.client
+    implementation libs.gridgain.code.deployment
     implementation libs.gridgain.runner
     implementation libs.gridgain.jdbc
     implementation libs.h2
@@ -123,6 +97,7 @@ dependencies {
 
     integrationTestImplementation libs.gridgain.api
     integrationTestImplementation libs.gridgain.client
+    integrationTestImplementation libs.gridgain.code.deployment
     integrationTestImplementation libs.gridgain.runner
     integrationTestImplementation libs.gridgain.jdbc
     integrationTestImplementation libs.typesafe.config
