@@ -9,6 +9,11 @@
 
 import javax.naming.ConfigurationException
 
+plugins {
+    id('idea')
+    alias(libs.plugins.spotbugs) apply false
+}
+
 group = 'org.gridgain'
 version = "1.0-SNAPSHOT"
 
@@ -43,7 +48,6 @@ File findGridgainLicense() {
         }
 }
 
-
 ext {
     extraJvmArgs = [
             "--add-opens=java.base/java.lang=ALL-UNNAMED",
@@ -59,6 +63,12 @@ ext {
             "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
             "-Dio.netty.tryReflectionSetAccessible=true"
     ]
+    product = "gg9-examples"
+    projectVersion = project.hasProperty('projectVersion') ? project.property('projectVersion') : '9.0.127-SNAPSHOT'
+    def versionPattern = '\\d+\\.\\d+\\.\\d+(?:\\.(\\d+))?(?:-[0-9A-Za-z]+)?'
+    if (!projectVersion.matches(versionPattern)) {
+        throw new GradleException("Project version $projectVersion doesn't conform to the semver format")
+    }
 }
 
 tasks.withType(Test).configureEach {

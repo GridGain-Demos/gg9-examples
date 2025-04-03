@@ -29,7 +29,6 @@ testing {
                 implementation libs.hamcrest.optional
                 implementation libs.hamcrest.path
 
-//                implementation libs.jansi.core
                 implementation libs.log4j.api
                 implementation libs.log4j.core
                 implementation libs.log4j.bridge
@@ -69,6 +68,10 @@ check {
     dependsOn integrationTest
 }
 
+pmdIntegrationTest {
+    enabled = false
+}
+
 tasks.register('jacocoIntegrationTestReport', JacocoReport) {
     dependsOn integrationTest
 
@@ -78,4 +81,8 @@ tasks.register('jacocoIntegrationTestReport', JacocoReport) {
         xml.required = false
         html.required = true
     }
+}
+
+spotbugsIntegrationTest {
+    enabled(false)
 }
