@@ -163,8 +163,9 @@ public class KeyValueViewPojoDataStreamerExample {
             //
             //--------------------------------------------------------------------------------------
 
-            System.out.println("\nStreaming account data using " +
-                    (remove ? DataStreamerOperationType.REMOVE : DataStreamerOperationType.PUT) + " operation type...");
+            System.out.println("\nStreaming account data using "
+                    + (remove ? DataStreamerOperationType.REMOVE : DataStreamerOperationType.PUT)
+                    + " operation type...");
 
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
@@ -177,8 +178,9 @@ public class KeyValueViewPojoDataStreamerExample {
 
                 publisher.submit(remove ? DataStreamerItem.removed(Map.entry(key, value)) : DataStreamerItem.of(Map.entry(key, value)));
 
-                if (i > 0 && i % 10_000 == 0)
+                if (i > 0 && i % 10_000 == 0) {
                     System.out.println("Streamed " + i + " accounts.");
+                }
             }
         }
 

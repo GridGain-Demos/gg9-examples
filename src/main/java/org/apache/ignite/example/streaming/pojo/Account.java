@@ -80,11 +80,11 @@ public class Account {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "Account{" +
-                "accountNumber=" + accountNumber +
-                ", name='" + name + '\'' +
-                ", balance=" + balance +
-                ", active=" + active +
-                '}';
+        return "Account{"
+                + "accountNumber=" + accountNumber
+                + ", name='" + name + '\''
+                + ", balance=" + balance
+                + ", active=" + active
+                + '}';
     }
 }

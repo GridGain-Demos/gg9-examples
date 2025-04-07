@@ -249,8 +249,9 @@ public class ReceiverStreamProcessingWithTableUpdateExample {
 
             publisher.submit(trade);
 
-            if (i > 0 && i % 1000 == 0)
+            if (i > 0 && i % 1000 == 0) {
                 System.out.println("Streamed " + i + " trades.");
+            }
         }
     }
 
@@ -315,8 +316,9 @@ public class ReceiverStreamProcessingWithTableUpdateExample {
             for (Trade trade : trades) {
                 int adjustedAmount = trade.getAmount() * args.multiplier;
 
-                if (adjustedAmount < args.minimalAmount)
+                if (adjustedAmount < args.minimalAmount) {
                     continue;
+                }
 
                 ctx.ignite().transactions().runInTransaction(tx -> {
                     Account account = view.get(tx, new Account(trade.getAccountNumber()));

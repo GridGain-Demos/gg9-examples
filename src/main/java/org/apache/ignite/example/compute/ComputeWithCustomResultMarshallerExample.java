@@ -108,8 +108,9 @@ public class ComputeWithCustomResultMarshallerExample {
             //
             //--------------------------------------------------------------------------------------
 
-            for (WordInfoResult result : results)
+            for (WordInfoResult result : results) {
                 System.out.println("The length of the word '" + result.word + "'" + " is " + result.length + ".");
+            }
         }
     }
 
@@ -176,10 +177,10 @@ public class ComputeWithCustomResultMarshallerExample {
         /** {@inheritDoc} */
         @Override
         public String toString() {
-            return "WordInfoResult{" +
-                    "word='" + word + '\'' +
-                    ", length=" + length +
-                    '}';
+            return "WordInfoResult{"
+                    + "word='" + word + '\''
+                    + ", length=" + length
+                    + '}';
         }
     }
 

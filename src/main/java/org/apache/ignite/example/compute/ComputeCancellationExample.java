@@ -128,8 +128,7 @@ public class ComputeCancellationExample {
         public CompletableFuture<Void> executeAsync(JobExecutionContext context, Object arg) {
             try {
                 new CountDownLatch(1).await();
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 

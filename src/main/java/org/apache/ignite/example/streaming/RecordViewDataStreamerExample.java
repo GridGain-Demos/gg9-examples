@@ -159,8 +159,9 @@ public class RecordViewDataStreamerExample {
             //
             //--------------------------------------------------------------------------------------
 
-            System.out.println("\nStreaming account data using " +
-                    (remove ? DataStreamerOperationType.REMOVE : DataStreamerOperationType.PUT) + " operation type...");
+            System.out.println("\nStreaming account data using "
+                    + (remove ? DataStreamerOperationType.REMOVE : DataStreamerOperationType.PUT)
+                    + " operation type...");
 
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
 
@@ -175,8 +176,9 @@ public class RecordViewDataStreamerExample {
 
                 publisher.submit(remove ? DataStreamerItem.removed(entry) : DataStreamerItem.of(entry));
 
-                if (i > 0 && i % 10_000 == 0)
+                if (i > 0 && i % 10_000 == 0) {
                     System.out.println("Streamed " + i + " accounts.");
+                }
             }
         }
 

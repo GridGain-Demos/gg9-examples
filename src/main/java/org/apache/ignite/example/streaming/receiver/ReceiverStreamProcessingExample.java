@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -210,7 +211,7 @@ public class ReceiverStreamProcessingExample {
 
         assert stream != null;
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             reader.lines().forEach(publisher::submit);
         }
     }
@@ -240,11 +241,12 @@ public class ReceiverStreamProcessingExample {
 
             Account account = accountsView.get(null, new Account(trade.getAccountNumber()));
 
-            if (!account.isActive())
+            if (!account.isActive()) {
                 return;
+            }
 
-            System.out.println("The trade with id=" + trade.getTradeId() + " for account with accountNumber=" +
-                    account.getAccountNumber() + " was processed.");
+            System.out.println("The trade with id=" + trade.getTradeId() + " for account with accountNumber="
+                    + account.getAccountNumber() + " was processed.");
         }
 
         /**

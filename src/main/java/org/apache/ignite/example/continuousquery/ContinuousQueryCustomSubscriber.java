@@ -59,7 +59,7 @@ public class ContinuousQueryCustomSubscriber implements Flow.Subscriber<TableRow
     public void onNext(TableRowEventBatch<Tuple> batch) {
         List<TableRowEvent<Tuple>> items = batch.rows();
 
-        for (TableRowEvent<Tuple> item: items) {
+        for (TableRowEvent<Tuple> item : items) {
             System.out.println("Event [type=" + item.type() + ", oldEntry=" + item.oldEntry() + ", newEntry=" + item.entry() + "]");
 
             this.lastEventWatermark = item.watermark();

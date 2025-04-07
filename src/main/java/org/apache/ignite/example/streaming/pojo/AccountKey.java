@@ -35,8 +35,8 @@ public class AccountKey {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "AccountKey{" +
-                "accountNumber=" + accountNumber +
-                '}';
+        return "AccountKey{"
+                + "accountNumber=" + accountNumber
+                + '}';
     }
 }

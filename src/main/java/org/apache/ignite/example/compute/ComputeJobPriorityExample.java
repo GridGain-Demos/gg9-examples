@@ -124,6 +124,8 @@ public class ComputeJobPriorityExample {
         /** {@inheritDoc} */
         @Override
         public CompletableFuture<String> executeAsync(JobExecutionContext context, Integer arg) {
+            assert arg != null;
+
             System.out.println("\nHighPriorityJob started for arg '" + arg + "' at node '" + context.ignite().name() + "'.");
 
             try {
@@ -147,6 +149,8 @@ public class ComputeJobPriorityExample {
         /** {@inheritDoc} */
         @Override
         public CompletableFuture<String> executeAsync(JobExecutionContext context, Integer arg) {
+            assert arg != null;
+
             System.out.println("\nLowPriorityJob started for arg '" + arg + "' at node '" + context.ignite().name() + "'.");
 
             try {

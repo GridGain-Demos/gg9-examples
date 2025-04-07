@@ -68,11 +68,11 @@ public class Trade implements Serializable {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "Trade{" +
-                "tradeId=" + tradeId +
-                ", accountNumber=" + accountNumber +
-                ", amount=" + amount +
-                '}';
+        return "Trade{"
+                + "tradeId=" + tradeId
+                + ", accountNumber=" + accountNumber
+                + ", amount=" + amount
+                + '}';
     }
 
     /**

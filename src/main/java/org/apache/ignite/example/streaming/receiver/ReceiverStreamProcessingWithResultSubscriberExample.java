@@ -231,8 +231,9 @@ public class ReceiverStreamProcessingWithResultSubscriberExample {
 
             publisher.submit(trade);
 
-            if (i > 0 && i % 1000 == 0)
+            if (i > 0 && i % 1000 == 0) {
                 System.out.println("Streamed " + i + " trades.");
+            }
         }
     }
 
@@ -263,12 +264,14 @@ public class ReceiverStreamProcessingWithResultSubscriberExample {
          * @return Trade processing result.
          */
         private static String processTrade(Trade trade, Account account) {
-            if (account.isActive())
+            if (account.isActive()) {
                 return trade.getTradeId() + ":" + Boolean.FALSE;
+            }
 
-            if (trade.getAmount() > TRADE_WARNING_THRESHOLD)
-                System.out.println("The trade has reached the threshold: Trade [id=" + trade.getTradeId() + ", accountNumber=" +
-                        trade.getAccountNumber() + ", amount=" + trade.getAmount() + "]." );
+            if (trade.getAmount() > TRADE_WARNING_THRESHOLD) {
+                System.out.println("The trade has reached the threshold: Trade [id=" + trade.getTradeId()
+                        + ", accountNumber=" + trade.getAccountNumber() + ", amount=" + trade.getAmount() + "].");
+            }
 
             return trade.getTradeId() + ":" + Boolean.TRUE;
         }
@@ -280,9 +283,6 @@ public class ReceiverStreamProcessingWithResultSubscriberExample {
     private static class TradeProcessingResultSubscriber implements Subscriber<String> {
         /** Subscriber future. */
         private final CompletableFuture<Void> subscriberFut;
-
-        /** Subscription. */
-        private Subscription subscription;
 
         /**
          * Constructor.
@@ -296,7 +296,6 @@ public class ReceiverStreamProcessingWithResultSubscriberExample {
         /** {@inheritDoc} */
         @Override
         public void onSubscribe(Subscription subscription) {
-            this.subscription = subscription;
         }
 
         /** {@inheritDoc} */

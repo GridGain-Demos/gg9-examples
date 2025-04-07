@@ -45,10 +45,10 @@ public class AccountValue {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "AccountValue{" +
-                "name='" + name + '\'' +
-                ", balance=" + balance +
-                ", active=" + active +
-                '}';
+        return "AccountValue{"
+                + "name='" + name + '\''
+                + ", balance=" + balance
+                + ", active=" + active
+                + '}';
     }
 }

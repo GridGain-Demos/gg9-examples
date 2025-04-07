@@ -156,8 +156,8 @@ public class ComputeColocatedExample {
 
             Tuple account = view.get(null, accountKey);
 
-            System.out.println("Account info [accountNumber=" + account.intValue(0) +
-                    ", name=" + account.stringValue(1) + "]");
+            System.out.println("Account info [accountNumber=" + account.intValue(0)
+                    + ", name=" + account.stringValue(1) + "]");
 
             return completedFuture(null);
         }

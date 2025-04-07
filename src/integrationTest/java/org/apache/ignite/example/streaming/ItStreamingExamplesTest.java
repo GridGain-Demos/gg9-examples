@@ -9,10 +9,10 @@
 
 package org.apache.ignite.example.streaming;
 
+import static org.apache.ignite.example.ExampleTestUtils.assertConsoleOutputContains;
+
 import org.apache.ignite.example.AbstractExamplesTest;
 import org.junit.jupiter.api.Test;
-
-import static org.apache.ignite.example.ExampleTestUtils.assertConsoleOutputContains;
 
 /**
  * These tests check that all table examples pass correctly.

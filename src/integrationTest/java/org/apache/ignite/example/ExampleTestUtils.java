@@ -9,14 +9,6 @@
 
 package org.apache.ignite.example;
 
-import org.apache.ignite.IgniteServer;
-import org.apache.ignite.deployment.version.Version;
-import org.apache.ignite.internal.app.IgniteImpl;
-import org.apache.ignite.internal.app.IgniteServerImpl;
-import org.apache.ignite.internal.deployunit.DeploymentUnit;
-import org.apache.ignite.internal.deployunit.InitialDeployMode;
-import org.apache.ignite.internal.deployunit.NodesToDeploy;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -34,6 +26,13 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import org.apache.ignite.IgniteServer;
+import org.apache.ignite.deployment.version.Version;
+import org.apache.ignite.internal.app.IgniteImpl;
+import org.apache.ignite.internal.app.IgniteServerImpl;
+import org.apache.ignite.internal.deployunit.DeploymentUnit;
+import org.apache.ignite.internal.deployunit.InitialDeployMode;
+import org.apache.ignite.internal.deployunit.NodesToDeploy;
 
 /**
  * Example test utilities.
