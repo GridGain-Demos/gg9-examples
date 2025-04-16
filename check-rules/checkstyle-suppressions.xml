@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!--
+  ~  Copyright (C) GridGain Systems. All Rights Reserved.
+  ~  _________        _____ __________________        _____
+  ~  __  ____/___________(_)______  /__  ____/______ ____(_)_______
+  ~  _  / __  __  ___/__  / _  __  / _  / __  _  __ `/__  / __  __ \
+  ~  / /_/ /  _  /    _  /  / /_/ /  / /_/ /  / /_/ / _  /  _  / / /
+  ~  \____/   /_/     /_/   \_,__/   \____/   \__,_/  /_/   /_/ /_/
+  -->
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+  <!-- Suppressed modules. -->
+  <suppress files="[/\\]target[/\\]" checks=".*" />
+
+  <!-- Generated code. -->
+  <suppress files="[/\\]build[/\\]generated" checks=".*" />
+</suppressions>

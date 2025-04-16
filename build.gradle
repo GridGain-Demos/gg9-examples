@@ -1,0 +1,123 @@
+/*
+ *  Copyright (C) GridGain Systems. All Rights Reserved.
+ *  _________        _____ __________________        _____
+ *  __  ____/___________(_)______  /__  ____/______ ____(_)_______
+ *  _  / __  __  ___/__  / _  __  / _  / __  _  __ `/__  / __  __ \
+ *  / /_/ /  _  /    _  /  / /_/ /  / /_/ /  / /_/ / _  /  _  / / /
+ *  \____/   /_/     /_/   \_,__/   \____/   \__,_/  /_/   /_/ /_/
+ */
+
+import javax.naming.ConfigurationException
+
+plugins {
+    id('idea')
+    alias(libs.plugins.spotbugs) apply false
+}
+
+group = 'org.gridgain'
+version = "1.0-SNAPSHOT"
+
+apply from: "$rootDir/buildscripts/java-core.gradle"
+apply from: "$rootDir/buildscripts/java-junit5.gradle"
+apply from: "$rootDir/buildscripts/java-integration-test.gradle"
+
+description = 'gg9-examples'
+
+ext {
+    configurationInstructions = """
+Add the following content in your <HOME>/gradle.properties, replacing values appropriately:
+```
+gridgain_license=<PATH_TO_GRIDGAIN_LICENSE>
+```
+Alternatively you can set environment variable GRIDGAIN_LICENSE with the path to file.
+"""
+}
+
+File findGridgainLicense() {
+    def projectPath = new File(projectDir, "config/gridgain-license.conf").absolutePath
+    String pathFromProperties = project.properties['gridgain_license']
+    def pathFromEnvironment = System.getenv('GRIDGAIN_LICENSE')
+
+    return [projectPath, pathFromProperties, pathFromEnvironment].stream()
+        .filter { it != null }
+        .map { new File(it) }
+        .filter { it.isFile() }
+        .findFirst()
+        .orElseThrow {
+            new ConfigurationException("Gridgain license file is not found: " + configurationInstructions)
+        }
+}
+
+ext {
+    extraJvmArgs = [
+            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-opens=java.base/java.nio=ALL-UNNAMED",
+            "--add-opens=java.base/java.math=ALL-UNNAMED",
+            "--add-opens=java.base/java.util=ALL-UNNAMED",
+            "--add-opens=java.base/java.time=ALL-UNNAMED",
+            "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
+            "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+            "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+            "-Dio.netty.tryReflectionSetAccessible=true"
+    ]
+    product = "gg9-examples"
+    projectVersion = project.hasProperty('projectVersion') ? project.property('projectVersion') : '9.0.127-SNAPSHOT'
+    def versionPattern = '\\d+\\.\\d+\\.\\d+(?:\\.(\\d+))?(?:-[0-9A-Za-z]+)?'
+    if (!projectVersion.matches(versionPattern)) {
+        throw new GradleException("Project version $projectVersion doesn't conform to the semver format")
+    }
+}
+
+tasks.withType(Test).configureEach {
+    defaultCharacterEncoding = 'UTF-8'
+
+    jvmArgs += extraJvmArgs
+
+    doFirst {
+        environment 'GRIDGAIN_LICENSE', findGridgainLicense().absolutePath
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repository.apache.org/snapshots')
+    }
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+    maven {
+        name = "gridgain"
+        url = uri("https://maven.gridgain.com/nexus/content/repositories/external")
+    }
+}
+
+dependencies {
+    implementation libs.gridgain.api
+    implementation libs.gridgain.client
+    implementation libs.gridgain.code.deployment
+    implementation libs.gridgain.runner
+    implementation libs.gridgain.jdbc
+    implementation libs.h2
+    implementation libs.gridgain.jdbc.cache.store
+    implementation libs.jetbrains.annotations
+
+    integrationTestImplementation libs.gridgain.api
+    integrationTestImplementation libs.gridgain.client
+    integrationTestImplementation libs.gridgain.code.deployment
+    integrationTestImplementation libs.gridgain.runner
+    integrationTestImplementation libs.gridgain.jdbc
+    integrationTestImplementation libs.typesafe.config
+    integrationTestImplementation libs.gridgain.core
+    integrationTestImplementation libs.gridgain.storage.page.memory
+    integrationTestImplementation libs.gridgain.page.memory
+    integrationTestImplementation libs.gridgain.network
+    integrationTestImplementation libs.gridgain.storage.api
+    integrationTestImplementation libs.gridgain.storage.rocksdb
+    integrationTestImplementation libs.gridgain.configuration
+    integrationTestImplementation libs.hamcrest.core
+    integrationTestImplementation libs.jetbrains.annotations
+}
