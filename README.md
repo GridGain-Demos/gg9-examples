@@ -50,6 +50,7 @@ The following examples are included:
   with a custom result marshaller.
 * `ComputeWithResultExample` - demonstrates the usage of the `IgniteCompute#execute(JobTarget, JobDescriptor, Object)`}` API
   with a result return.
+* `SqlJdbcExample` - demonstrates the usage of the basic sql queries via JDBC.
 
 Then, to run tests, invoke:
 ```shell
