@@ -50,6 +50,7 @@ The following examples are included:
   with a custom result marshaller.
 * `ComputeWithResultExample` - demonstrates the usage of the `IgniteCompute#execute(JobTarget, JobDescriptor, Object)`}` API
   with a result return.
+* `SqlJdbcCopyExample` - demonstrates the usage of the `COPY` command via JDBC driver.
 
 Then, to run tests, invoke:
 ```shell
