@@ -50,6 +50,7 @@ The following examples are included:
   with a custom result marshaller.
 * `ComputeWithResultExample` - demonstrates the usage of the `IgniteCompute#execute(JobTarget, JobDescriptor, Object)`}` API
   with a result return.
+* `SqlDdlExample` - demonstrates the DDL capabilities of SQL engine via thin client.
 
 Then, to run tests, invoke:
 ```shell
