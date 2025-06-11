@@ -9,7 +9,6 @@
 
 package org.apache.ignite.example.sql;
 
-import java.util.List;
 import org.apache.ignite.client.IgniteClient;
 import org.apache.ignite.sql.BatchedArguments;
 import org.apache.ignite.sql.ResultSet;
@@ -38,65 +37,61 @@ public class SqlDdlExample {
             // Drop data if exists.
             //
             //--------------------------------------------------------------------------------------
-            client.sql().executeScript("DROP INDEX IF EXISTS Person_idx");
-            client.sql().executeScript("DROP TABLE IF EXISTS Person");
-            client.sql().executeScript("DROP TABLE IF EXISTS City");
-            client.sql().executeScript("DROP ZONE IF EXISTS sqlJdbcReplica2");
+            client.sql().executeScript("DROP INDEX IF EXISTS Person_idx; "
+                    + "DROP TABLE IF EXISTS Person; "
+                    + "DROP TABLE IF EXISTS City; "
+                    + "DROP ZONE IF EXISTS sqlJdbcReplica2; "
 
-            //--------------------------------------------------------------------------------------
-            //
-            // Create ZONE wth replica=2.
-            //
-            //--------------------------------------------------------------------------------------
+                    //--------------------------------------------------------------------------------------
+                    //
+                    // Create ZONE wth replica=2.
+                    //
+                    //--------------------------------------------------------------------------------------
 
-            client.sql().executeScript("CREATE ZONE IF NOT EXISTS sqlJdbcReplica2 WITH STORAGE_PROFILES='default', replicas=2");
+                    + "CREATE ZONE IF NOT EXISTS sqlJdbcReplica2 WITH STORAGE_PROFILES='default', replicas=2; "
 
-            //--------------------------------------------------------------------------------------
-            //
-            // Create reference City table in the zone with replica=2.
-            //
-            //--------------------------------------------------------------------------------------
+                    //--------------------------------------------------------------------------------------
+                    //
+                    // Create reference City table in the zone with replica=2.
+                    //
+                    //--------------------------------------------------------------------------------------
 
-            client.sql().executeScript(
-                    "CREATE TABLE city (id INT PRIMARY KEY, name VARCHAR) ZONE sqlJdbcReplica2");
+                    + "CREATE TABLE city (id INT PRIMARY KEY, name VARCHAR) ZONE sqlJdbcReplica2; "
 
-            //--------------------------------------------------------------------------------------
-            //
-            // Create table in the zone with replica=2.
-            //
-            //--------------------------------------------------------------------------------------
+                    //--------------------------------------------------------------------------------------
+                    //
+                    // Create table in the zone with replica=2.
+                    //
+                    //--------------------------------------------------------------------------------------
 
-            client.sql().executeScript(
-                    "CREATE TABLE person (id INT, name VARCHAR, city_id INT, PRIMARY KEY (id, city_id)) "
-                            + "COLOCATE BY (city_id) ZONE sqlJdbcReplica2");
+                    + "CREATE TABLE person (id INT, name VARCHAR, city_id INT, PRIMARY KEY (id, city_id)) "
+                    + "COLOCATE BY (city_id) ZONE sqlJdbcReplica2; "
 
-            //--------------------------------------------------------------------------------------
-            //
-            // Create an index.
-            //
-            //--------------------------------------------------------------------------------------
+                    //--------------------------------------------------------------------------------------
+                    //
+                    // Create an index.
+                    //
+                    //--------------------------------------------------------------------------------------
 
-            client.sql().executeScript("CREATE INDEX Person_idx on Person (city_id)");
+                    + "CREATE INDEX Person_idx on Person (city_id)");
 
             System.out.println("\nCreated database objects.");
 
             client.sql().executeBatch(null, "INSERT INTO city (id, name) VALUES (?, ?)",
-                    BatchedArguments.from(
-                            List.of(
-                                    List.of(1L, "Forest Hill"),
-                                    List.of(2L, "Denver"),
-                                    List.of(3L, "St. Petersburg")
-                            )
-                    ));
+                    BatchedArguments
+                            .of(1L, "Forest Hill")
+                            .add(2L, "Denver")
+                            .add(3L, "St. Petersburg")
+
+            );
 
             client.sql().executeBatch(null, "INSERT INTO person (id, name, city_id) values (?, ?, ?)",
-                    BatchedArguments.from(
-                            List.of(
-                                    List.of(1L, "John Doe", 3L),
-                                    List.of(2L, "Jane Roe", 2L),
-                                    List.of(3L, "Mary Major", 1L),
-                                    List.of(4L, "Richard Miles", 2L)
-                            )));
+                    BatchedArguments
+                            .of(1L, "John Doe", 3L)
+                            .add(2L, "Jane Roe", 2L)
+                            .add(3L, "Mary Major", 1L)
+                            .add(4L, "Richard Miles", 2L)
+            );
 
             System.out.println("\nPopulated data.");
 
@@ -112,8 +107,8 @@ public class SqlDdlExample {
                 }
             }
 
-            client.sql().executeScript("drop table Person");
-            client.sql().executeScript("drop table City");
+            client.sql().executeScript("drop table Person; "
+                    + "drop table City;");
 
             System.out.println("\nDropped database objects.");
         }
