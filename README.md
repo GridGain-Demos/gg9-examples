@@ -51,6 +51,7 @@ The following examples are included:
 * `ComputeWithResultExample` - demonstrates the usage of the `IgniteCompute#execute(JobTarget, JobDescriptor, Object)`}` API
   with a result return.
 * `SqlDdlExample` - demonstrates the DDL capabilities of SQL engine via thin client.
+* `SqlJdbcCopyExample` - demonstrates the usage of the `COPY` command via JDBC driver.
 
 Then, to run tests, invoke:
 ```shell
