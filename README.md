@@ -50,6 +50,7 @@ The following examples are included:
   with a custom result marshaller.
 * `ComputeWithResultExample` - demonstrates the usage of the `IgniteCompute#execute(JobTarget, JobDescriptor, Object)`}` API
   with a result return.
+* `SqlDdlExample` - demonstrates the DDL capabilities of SQL engine via thin client.
 * `SqlJdbcCopyExample` - demonstrates the usage of the `COPY` command via JDBC driver.
 * `SqlJdbcExample` - demonstrates the usage of the basic sql queries via JDBC.
 
