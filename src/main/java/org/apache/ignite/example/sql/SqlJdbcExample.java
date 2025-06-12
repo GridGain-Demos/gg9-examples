@@ -52,35 +52,35 @@ public class SqlJdbcExample {
                 // Drop data if exists.
                 //
                 //--------------------------------------------------------------------------------------
-                stmt.executeUpdate("DROP INDEX IF EXISTS Person_idx");
+                stmt.executeUpdate("DROP INDEX IF EXISTS PersonIdx");
                 stmt.executeUpdate("DROP TABLE IF EXISTS Person");
                 stmt.executeUpdate("DROP TABLE IF EXISTS City");
-                stmt.executeUpdate("DROP ZONE IF EXISTS sqlJdbcReplica2");
+                stmt.executeUpdate("DROP ZONE IF EXISTS ReplicatedZone");
 
                 //--------------------------------------------------------------------------------------
                 //
-                // Create ZONE wth replica=2.
+                // Create zone with replicas=2.
                 //
                 //--------------------------------------------------------------------------------------
 
-                stmt.executeUpdate("CREATE ZONE IF NOT EXISTS sqlJdbcReplica2 WITH STORAGE_PROFILES='default', replicas=2");
+                stmt.executeUpdate("CREATE ZONE IF NOT EXISTS ReplicatedZone WITH STORAGE_PROFILES='default', REPLICAS=2");
 
                 //--------------------------------------------------------------------------------------
                 //
-                // Create reference City table in the zone with replica=2.
+                // Create reference City table in the zone with replicas=2.
                 //
                 //--------------------------------------------------------------------------------------
 
-                stmt.executeUpdate("CREATE TABLE city (id INT PRIMARY KEY, name VARCHAR) ZONE sqlJdbcReplica2");
+                stmt.executeUpdate("CREATE TABLE City (id INT PRIMARY KEY, name VARCHAR) ZONE ReplicatedZone");
 
                 //--------------------------------------------------------------------------------------
                 //
-                // Create table in the zone with replica=2.
+                // Create table in the zone with replicas=2.
                 //
                 //--------------------------------------------------------------------------------------
 
-                stmt.executeUpdate("CREATE TABLE person (id INT, name VARCHAR, city_id INT, "
-                        + "PRIMARY KEY (id, city_id)) COLOCATE BY (city_id) ZONE sqlJdbcReplica2");
+                stmt.executeUpdate("CREATE TABLE Person (id INT, name VARCHAR, city_id INT, "
+                        + "PRIMARY KEY (id, city_id)) COLOCATE BY (city_id) ZONE ReplicatedZone");
 
                 //--------------------------------------------------------------------------------------
                 //
@@ -88,10 +88,10 @@ public class SqlJdbcExample {
                 //
                 //--------------------------------------------------------------------------------------
 
-                stmt.executeUpdate("CREATE INDEX Person_idx on Person (city_id)");
+                stmt.executeUpdate("CREATE INDEX PersonIdx ON Person (city_id)");
             }
 
-            System.out.println("\nCreated database objects.");
+            System.out.println("\nDatabase objects have been created.");
 
             //--------------------------------------------------------------------------------------
             //
@@ -99,7 +99,7 @@ public class SqlJdbcExample {
             //
             //--------------------------------------------------------------------------------------
 
-            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO city (id, name) VALUES (?, ?)")) {
+            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO City (id, name) VALUES (?, ?)")) {
                 stmt.setLong(1, 1L);
                 stmt.setString(2, "Forest Hill");
                 stmt.executeUpdate();
@@ -120,7 +120,7 @@ public class SqlJdbcExample {
             //--------------------------------------------------------------------------------------
 
             try (PreparedStatement stmt =
-                    conn.prepareStatement("INSERT INTO person (id, name, city_id) values (?, ?, ?)")) {
+                    conn.prepareStatement("INSERT INTO Person (id, name, city_id) VALUES (?, ?, ?)")) {
                 stmt.setLong(1, 1L);
                 stmt.setString(2, "John Doe");
                 stmt.setLong(3, 3L);
@@ -142,7 +142,7 @@ public class SqlJdbcExample {
                 stmt.executeUpdate();
             }
 
-            System.out.println("\n" + "Populated data.");
+            System.out.println("\n" + "Data has been populated.");
 
             //--------------------------------------------------------------------------------------
             //
@@ -152,7 +152,7 @@ public class SqlJdbcExample {
 
             try (Statement stmt = conn.createStatement()) {
                 try (ResultSet rs =
-                        stmt.executeQuery("SELECT p.name, c.name FROM Person p INNER JOIN City c on c.id = p.city_id")) {
+                        stmt.executeQuery("SELECT p.name, c.name FROM Person p INNER JOIN City c ON c.id = p.city_id")) {
                     System.out.println("\nQuery results:");
 
                     while (rs.next()) {
@@ -168,13 +168,13 @@ public class SqlJdbcExample {
             //--------------------------------------------------------------------------------------
 
             try (Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate("DROP INDEX IF EXISTS Person_idx");
+                stmt.executeUpdate("DROP INDEX IF EXISTS PersonIdx");
                 stmt.executeUpdate("DROP TABLE IF EXISTS Person");
                 stmt.executeUpdate("DROP TABLE IF EXISTS City");
-                stmt.executeUpdate("DROP ZONE IF EXISTS sqlJdbcReplica2");
+                stmt.executeUpdate("DROP ZONE IF EXISTS ReplicatedZone");
             }
 
-            System.out.println("\nDropped database objects.");
+            System.out.println("\nDatabase objects have been dropped.");
         }
     }
 }
