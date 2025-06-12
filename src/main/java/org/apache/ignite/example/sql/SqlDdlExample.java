@@ -37,10 +37,10 @@ public class SqlDdlExample {
             // Drop data if exists.
             //
             //--------------------------------------------------------------------------------------
-            client.sql().executeScript("DROP INDEX IF EXISTS Person_idx; "
+            client.sql().executeScript("DROP INDEX IF EXISTS PersonIdx; "
                     + "DROP TABLE IF EXISTS Person; "
                     + "DROP TABLE IF EXISTS City; "
-                    + "DROP ZONE IF EXISTS SqlReplicaZone; "
+                    + "DROP ZONE IF EXISTS ReplicatedZone; "
 
                     //--------------------------------------------------------------------------------------
                     //
@@ -48,7 +48,7 @@ public class SqlDdlExample {
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE ZONE IF NOT EXISTS SqlReplicaZone WITH STORAGE_PROFILES='default', REPLICAS=2; "
+                    + "CREATE ZONE IF NOT EXISTS ReplicatedZone WITH STORAGE_PROFILES='default', REPLICAS=2; "
 
                     //--------------------------------------------------------------------------------------
                     //
@@ -56,7 +56,7 @@ public class SqlDdlExample {
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE TABLE City (id INT PRIMARY KEY, name VARCHAR) ZONE SqlReplicaZone; "
+                    + "CREATE TABLE City (id INT PRIMARY KEY, name VARCHAR) ZONE ReplicatedZone; "
 
                     //--------------------------------------------------------------------------------------
                     //
@@ -65,7 +65,7 @@ public class SqlDdlExample {
                     //--------------------------------------------------------------------------------------
 
                     + "CREATE TABLE Person (id INT, name VARCHAR, city_id INT, PRIMARY KEY (id, city_id)) "
-                    + "COLOCATE BY (city_id) ZONE SqlReplicaZone; "
+                    + "COLOCATE BY (city_id) ZONE ReplicatedZone; "
 
                     //--------------------------------------------------------------------------------------
                     //
@@ -73,7 +73,7 @@ public class SqlDdlExample {
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE INDEX Person_idx ON Person (city_id)");
+                    + "CREATE INDEX PersonIdx ON Person (city_id)");
 
             System.out.println("\nDatabase objects have been created.");
 
