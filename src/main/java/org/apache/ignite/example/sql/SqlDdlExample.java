@@ -40,32 +40,32 @@ public class SqlDdlExample {
             client.sql().executeScript("DROP INDEX IF EXISTS Person_idx; "
                     + "DROP TABLE IF EXISTS Person; "
                     + "DROP TABLE IF EXISTS City; "
-                    + "DROP ZONE IF EXISTS sqlJdbcReplica2; "
+                    + "DROP ZONE IF EXISTS SqlReplicaZone; "
 
                     //--------------------------------------------------------------------------------------
                     //
-                    // Create ZONE wth replica=2.
+                    // Create zone with replicas=2.
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE ZONE IF NOT EXISTS sqlJdbcReplica2 WITH STORAGE_PROFILES='default', replicas=2; "
+                    + "CREATE ZONE IF NOT EXISTS SqlReplicaZone WITH STORAGE_PROFILES='default', REPLICAS=2; "
 
                     //--------------------------------------------------------------------------------------
                     //
-                    // Create reference City table in the zone with replica=2.
+                    // Create reference City table in the zone with replicas=2.
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE TABLE city (id INT PRIMARY KEY, name VARCHAR) ZONE sqlJdbcReplica2; "
+                    + "CREATE TABLE City (id INT PRIMARY KEY, name VARCHAR) ZONE SqlReplicaZone; "
 
                     //--------------------------------------------------------------------------------------
                     //
-                    // Create table in the zone with replica=2.
+                    // Create table in the zone with replicas=2.
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE TABLE person (id INT, name VARCHAR, city_id INT, PRIMARY KEY (id, city_id)) "
-                    + "COLOCATE BY (city_id) ZONE sqlJdbcReplica2; "
+                    + "CREATE TABLE Person (id INT, name VARCHAR, city_id INT, PRIMARY KEY (id, city_id)) "
+                    + "COLOCATE BY (city_id) ZONE SqlReplicaZone; "
 
                     //--------------------------------------------------------------------------------------
                     //
@@ -73,11 +73,11 @@ public class SqlDdlExample {
                     //
                     //--------------------------------------------------------------------------------------
 
-                    + "CREATE INDEX Person_idx on Person (city_id)");
+                    + "CREATE INDEX Person_idx ON Person (city_id)");
 
-            System.out.println("\nCreated database objects.");
+            System.out.println("\nDatabase objects have been created.");
 
-            client.sql().executeBatch(null, "INSERT INTO city (id, name) VALUES (?, ?)",
+            client.sql().executeBatch(null, "INSERT INTO City (id, name) VALUES (?, ?)",
                     BatchedArguments
                             .of(1L, "Forest Hill")
                             .add(2L, "Denver")
@@ -85,7 +85,7 @@ public class SqlDdlExample {
 
             );
 
-            client.sql().executeBatch(null, "INSERT INTO person (id, name, city_id) values (?, ?, ?)",
+            client.sql().executeBatch(null, "INSERT INTO Person (id, name, city_id) values (?, ?, ?)",
                     BatchedArguments
                             .of(1L, "John Doe", 3L)
                             .add(2L, "Jane Roe", 2L)
@@ -93,10 +93,10 @@ public class SqlDdlExample {
                             .add(4L, "Richard Miles", 2L)
             );
 
-            System.out.println("\nPopulated data.");
+            System.out.println("\nData has been populated.");
 
             try (ResultSet<SqlRow> res = client.sql().execute(null,
-                    "SELECT p.name, c.name FROM Person p INNER JOIN City c on c.id = p.city_id")) {
+                    "SELECT p.name, c.name FROM Person p INNER JOIN City c ON c.id = p.city_id")) {
 
                 System.out.println("\nQuery results:");
 
@@ -107,12 +107,12 @@ public class SqlDdlExample {
                 }
             }
 
-            client.sql().executeScript("drop table Person; "
-                    + "drop table City;");
+            client.sql().executeScript("DROP TABLE Person; "
+                    + "DROP TABLE City;");
 
-            System.out.println("\nDropped database objects.");
+            System.out.println("\nDatabase objects have been dropped.");
         }
 
-        System.out.println("\nCache query DDL example finished.");
+        System.out.println("\nCache query DDL example has finished.");
     }
 }
