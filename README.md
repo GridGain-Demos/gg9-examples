@@ -64,7 +64,7 @@ Then, to run tests, invoke:
 1. Start a GridGain node:
 ```shell
 docker run --name gridgain9-node -d --rm -p 10300:10300 -p 10800:10800 \
-  -v $(pwd)/config/ignite-config.conf:/opt/ignite/etc/ignite-config.conf gridgain/gridgain9
+  -v $(pwd)/config/gridgain-config.conf:/opt/ignite/etc/gridgain-config.conf gridgain/gridgain9
 ```
 
 2. Get the IP address of the node:
@@ -97,7 +97,7 @@ export GRIDGAIN_CLI_HOME=/path/to/gridgain9-cli-dir
 
 3. Override the default configuration file:
 ```shell
-echo "CONFIG_FILE=config/ignite-config.conf" >> $GRIDGAIN_HOME/etc/vars.env
+echo "CONFIG_FILE=config/gridgain-config.conf" >> $GRIDGAIN_HOME/etc/vars.env
 ```
 
 4. Start an GridGain node using the startup script from the database part:
