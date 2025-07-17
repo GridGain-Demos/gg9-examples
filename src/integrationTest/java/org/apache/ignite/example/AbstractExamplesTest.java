@@ -76,7 +76,7 @@ public abstract class AbstractExamplesTest {
      * @throws IOException If an I/O error occurs during the file copying process.
      */
     private Path configFile() throws IOException {
-        var configFileName = "ignite-config.conf";
+        var configFileName = "gridgain-config.conf";
 
         return Files.copy(
                 Path.of("config", configFileName),
