@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
@@ -31,6 +30,7 @@ import org.apache.ignite.deployment.version.Version;
 import org.apache.ignite.internal.app.IgniteImpl;
 import org.apache.ignite.internal.app.IgniteServerImpl;
 import org.apache.ignite.internal.deployunit.DeploymentUnit;
+import org.apache.ignite.internal.deployunit.FilesDeploymentUnit;
 import org.apache.ignite.internal.deployunit.InitialDeployMode;
 import org.apache.ignite.internal.deployunit.NodesToDeploy;
 
@@ -121,16 +121,14 @@ public class ExampleTestUtils {
 
         fillDummyFile(dummyFile, 4);
 
-        try (InputStream inputStream = Files.newInputStream(dummyFile)) {
-            DeploymentUnit unit = new DeploymentUnit(Map.of(dummyFile.getFileName().toString(), inputStream));
+        DeploymentUnit unit = new FilesDeploymentUnit(Map.of(dummyFile.getFileName().toString(), dummyFile));
 
-            NodesToDeploy nodesToDeploy = new NodesToDeploy(InitialDeployMode.MAJORITY);
+        NodesToDeploy nodesToDeploy = new NodesToDeploy(InitialDeployMode.MAJORITY);
 
-            IgniteImpl ignite = ((IgniteServerImpl) node).igniteImpl();
+        IgniteImpl ignite = ((IgniteServerImpl) node).igniteImpl();
 
-            assertThat(ignite.deployment().deployAsync(id, Version.parseVersion("1.0.0"), unit,
-                    nodesToDeploy), willBe(true));
-        }
+        assertThat(ignite.deployment().deployAsync(id, Version.parseVersion("1.0.0"), unit,
+                nodesToDeploy), willBe(true));
     }
 
     /**

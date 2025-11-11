@@ -8,7 +8,7 @@
 #
 
 [versions]
-gridgain9 = "9.0.16"
+gridgain9 = "9.1.12"
 hamcrest = "2.2"
 hamcrestOptional = "2.0.0"
 hamcrestPath = "1.0.1"
