@@ -51,8 +51,7 @@ public abstract class AbstractExamplesTest {
         InitParameters initParameters = InitParameters.builder()
                 .metaStorageNodeNames(TEST_NODE_NAME)
                 .clusterName("cluster")
-                .cmgNodes(node)
-                .clusterConfiguration(readGridgainLicense())
+                .license(readGridgainLicense())
                 .build();
 
         assertThat(node.initClusterAsync(initParameters), willCompleteSuccessfully());
