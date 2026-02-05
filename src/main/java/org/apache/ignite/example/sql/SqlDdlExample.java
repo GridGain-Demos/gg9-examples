@@ -13,6 +13,7 @@ import org.apache.ignite.client.IgniteClient;
 import org.apache.ignite.sql.BatchedArguments;
 import org.apache.ignite.sql.ResultSet;
 import org.apache.ignite.sql.SqlRow;
+import org.apache.ignite.tx.Transaction;
 
 /**
  * Example to showcase DDL capabilities of SQL engine.
@@ -95,7 +96,7 @@ public class SqlDdlExample {
 
             System.out.println("\nData has been populated.");
 
-            try (ResultSet<SqlRow> res = client.sql().execute(null,
+            try (ResultSet<SqlRow> res = client.sql().execute((Transaction) null,
                     "SELECT p.name, c.name FROM Person p INNER JOIN City c ON c.id = p.city_id")) {
 
                 System.out.println("\nQuery results:");
