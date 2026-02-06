@@ -25,6 +25,7 @@ import org.apache.ignite.table.DataStreamerOptions;
 import org.apache.ignite.table.DataStreamerTarget;
 import org.apache.ignite.table.RecordView;
 import org.apache.ignite.table.Tuple;
+import org.apache.ignite.tx.Transaction;
 
 /**
  * This example demonstrates the usage of the {@link DataStreamerTarget#streamData(Publisher, DataStreamerOptions)} API
@@ -200,7 +201,7 @@ public class RecordViewDataStreamerExample {
         //
         //--------------------------------------------------------------------------------------
 
-        try (ResultSet<SqlRow> rs = client.sql().execute(null, "SELECT count(*) FROM accounts")) {
+        try (ResultSet<SqlRow> rs = client.sql().execute((Transaction) null, "SELECT count(*) FROM accounts")) {
             assert rs.hasNext();
 
             long entriesCnt = rs.next().longValue(0);
