@@ -19,6 +19,7 @@ log4j = "2.23.0"
 mockito = "5.12.0"
 typesafe_config = "1.4.3"
 jetbrainsAnnotations = "24.1.0"
+awaitility = "4.3.0"
 
 #Tools
 pmdTool = "6.55.0"
@@ -54,6 +55,8 @@ hamcrest-optional = { module = "com.github.npathai:hamcrest-optional", version.r
 hamcrest-path = { module = "ca.seinesoftware:hamcrest-path", version.ref = "hamcrestPath" }
 
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
+
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
 
 gridgain-api = { module = "org.gridgain:ignite-api", version.ref = "gridgain9" }
 gridgain-client = { module = "org.gridgain:ignite-client", version.ref = "gridgain9" }

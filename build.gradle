@@ -120,4 +120,5 @@ dependencies {
     integrationTestImplementation libs.gridgain.configuration
     integrationTestImplementation libs.hamcrest.core
     integrationTestImplementation libs.jetbrains.annotations
+    integrationTestImplementation libs.awaitility
 }
