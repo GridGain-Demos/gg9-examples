@@ -13,6 +13,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.WRITE;
 import static org.apache.ignite.example.CompletableFutureMatcher.willBe;
+import static org.apache.ignite.internal.deployunit.DeploymentStatus.DEPLOYED;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,8 +129,11 @@ public class ExampleTestUtils {
 
         IgniteImpl ignite = ((IgniteServerImpl) node).igniteImpl();
 
-        assertThat(ignite.deployment().deployAsync(id, Version.parseVersion("1.0.0"), unit,
-                nodesToDeploy), willBe(true));
+        Version version = Version.parseVersion("1.0.0");
+
+        assertThat(ignite.deployment().deployAsync(id, version, unit, nodesToDeploy), willBe(true));
+
+        await().until(() -> ignite.deployment().clusterStatusAsync(id, version), willBe(DEPLOYED));
     }
 
     /**
