@@ -11,6 +11,7 @@ package org.apache.ignite.example.compute;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CountDownLatch;
@@ -129,7 +130,7 @@ public class ComputeCancellationExample {
             try {
                 new CountDownLatch(1).await();
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                throw new CancellationException();
             }
 
             return completedFuture(null);
