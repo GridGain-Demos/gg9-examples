@@ -93,6 +93,9 @@ repositories {
         name = "gridgain"
         url = uri("https://maven.gridgain.com/nexus/content/repositories/external")
     }
+    maven {
+        url = uri('https://jitpack.io')
+    }
 }
 
 dependencies {
