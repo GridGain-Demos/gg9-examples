@@ -25,7 +25,7 @@ The following examples are included:
   with the `RecordView` and user-defined POJOs.
 * `ReceiverStreamProcessingExample` - demonstrates the usage of
   the `DataStreamerTarget#streamData(Publisher, Function, Function, ReceiverDescriptor, Subscriber, DataStreamerOptions, Object)` API
-  for stream processing of the trades data read from the file.
+  for stream processing of the trade data read from the file.
 * `ReceiverStreamProcessingWithResultSubscriberExample` - demonstrates the usage of
   the `DataStreamerTarget#streamData(Publisher, Function, Function, ReceiverDescriptor, Subscriber, DataStreamerOptions, Object)` API
   for stream processing of the trade data and receiving processing results.
