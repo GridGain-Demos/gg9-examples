@@ -112,5 +112,5 @@ $GRIDGAIN_CLI_HOME/bin/gridgain9 cluster init --name myCluster1 --metastorage-gr
 
 6. Run the example from the IDE.
 
-7. Stop the GridGain node by stopping the gridgain9db process. 
+7. Stop the GridGain node by stopping the gridgain9db process.
 See additional details here: https://www.gridgain.com/docs/gridgain9/latest/quick-start/getting-started-guide#stop-the-node
