@@ -20,6 +20,7 @@
 
     <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
     <rule ref="category/java/bestpractices.xml/UnusedPrivateField"/>
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod" />
     <rule ref="category/java/bestpractices.xml/AvoidPrintStackTrace" />
     <rule ref="category/java/bestpractices.xml/AvoidReassigningCatchVariables" />
     <rule ref="category/java/bestpractices.xml/MissingOverride" />
@@ -95,7 +96,7 @@
     <rule ref="category/java/performance.xml/BigIntegerInstantiation">
         <properties>
             <!-- Ignore in tests -->
-            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration['.*/src/test/java/.*']"/>
+            <property name="violationSuppressXPath" value="//ClassDeclaration['.*/src/test/java/.*']"/>
         </properties>
     </rule>
 
@@ -108,18 +109,10 @@
     <rule ref="category/java/multithreading.xml/UseNotifyAllInsteadOfNotify" />
 
 
-    <!--
-        UnusedPrivateMethod has a known bug which leads to false positive triggering if
-        method signature contains generic parameter and\or descendant class is passed as parameter.
-        See for details: https://github.com/pmd/pmd/issues/770
-        This was fixed in PMD 7.0.0 so should be returned when we upgrade the PMD
-    -->
-    <!--    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod" />-->
-
     <rule name="Prohibited classes"
       language="java"
       message="Avoid using these classes."
-      class="net.sourceforge.pmd.lang.rule.XPathRule" >
+      class="net.sourceforge.pmd.lang.rule.xpath.XPathRule" >
         <description>
             Avoid using these classes.
         </description>
@@ -128,7 +121,7 @@
             <property name="xpath">
                 <value>
                     <![CDATA[
-//Name[pmd-java:typeIs('org.jetbrains.annotations.NotNull')]
+//ClassType[pmd-java:typeIs('org.jetbrains.annotations.NotNull')]
                     ]]>
                 </value>
             </property>
