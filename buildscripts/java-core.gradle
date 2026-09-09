@@ -14,9 +14,20 @@ apply plugin: 'pmd'
 apply plugin: 'java-library'
 apply plugin: libs.plugins.spotbugs.get().pluginId
 
+// Left to itself the mismatch surfaces either as javac's "invalid target release" or as a wall of
+// Gradle variant-resolution text listing every GridGain module as unresolvable, and neither names
+// the JDK to install.
+if (JavaVersion.current() < project.javaBaseline) {
+    throw new GradleException("GridGain ${project.projectVersion} is built to a Java " +
+            "${project.javaBaseline.majorVersion} baseline, but this build runs on Java " +
+            "${JavaVersion.current().majorVersion}. Point JAVA_HOME at a JDK " +
+            "${project.javaBaseline.majorVersion} or newer, or build the examples against a " +
+            "9.1.x GridGain version.")
+}
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = project.javaBaseline
+    targetCompatibility = project.javaBaseline
     withSourcesJar()
     withJavadocJar()
 }

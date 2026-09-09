@@ -17,6 +17,26 @@ plugins {
 group = 'org.gridgain'
 version = "1.0-SNAPSHOT"
 
+// Read before the buildscripts are applied: java-core.gradle needs javaBaseline to set the
+// compatibility of every source set.
+ext {
+    product = "gg9-examples"
+    projectVersion = project.hasProperty('projectVersion') ? project.property('projectVersion') : '9.0.127-SNAPSHOT'
+    def versionPattern = '\\d+\\.\\d+\\.\\d+(?:\\.(\\d+))?(?:-[0-9A-Za-z]+)?'
+    if (!projectVersion.matches(versionPattern)) {
+        throw new GradleException("Project version $projectVersion doesn't conform to the semver format")
+    }
+
+    // GridGain publishes Gradle module metadata carrying org.gradle.jvm.version, and Gradle refuses a
+    // variant built for a newer release than the consumer compiles for. The 9.2 line is built to a
+    // Java 21 baseline, so examples asking for 11 cannot resolve it at all - the failure is an
+    // incompatible variant, not a missing artifact. Following the version under test lets one
+    // checkout build against either line, and keeps each line's examples runnable on the oldest JVM
+    // that line supports rather than raising both to 21.
+    def (major, minor) = projectVersion.tokenize('.-').take(2)*.toInteger()
+    javaBaseline = (major > 9 || (major == 9 && minor >= 2)) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_11
+}
+
 apply from: "$rootDir/buildscripts/java-core.gradle"
 apply from: "$rootDir/buildscripts/java-junit5.gradle"
 apply from: "$rootDir/buildscripts/java-integration-test.gradle"
@@ -63,12 +83,6 @@ ext {
             "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
             "-Dio.netty.tryReflectionSetAccessible=true"
     ]
-    product = "gg9-examples"
-    projectVersion = project.hasProperty('projectVersion') ? project.property('projectVersion') : '9.0.127-SNAPSHOT'
-    def versionPattern = '\\d+\\.\\d+\\.\\d+(?:\\.(\\d+))?(?:-[0-9A-Za-z]+)?'
-    if (!projectVersion.matches(versionPattern)) {
-        throw new GradleException("Project version $projectVersion doesn't conform to the semver format")
-    }
 }
 
 tasks.withType(Test).configureEach {
