@@ -22,7 +22,7 @@ jetbrainsAnnotations = "24.1.0"
 awaitility = "4.3.0"
 
 #Tools
-pmdTool = "6.55.0"
+pmdTool = "7.27.0"
 checkstyleTool = "10.3.3"
 jacocoTool = "0.8.11"
 spotbugsTool = "4.8.3"
