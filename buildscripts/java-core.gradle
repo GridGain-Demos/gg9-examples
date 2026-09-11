@@ -43,6 +43,17 @@ processResources {
     }
 }
 
+// With no jrt-fs.jar on the auxClasspath, PMD 7 falls back to the running platform's and warns on
+// every run that it could be the wrong Java version. No toolchain is configured -- the JVM running
+// Gradle is the JVM compiling the sources -- so that fallback is already the right one; naming it
+// explicitly keeps the same classpath and drops the warning. Deferred to afterEvaluate because the
+// source set classpath is not wired up yet when the PMD tasks are created.
+afterEvaluate {
+    tasks.withType(Pmd).configureEach {
+        classpath = files(classpath, "${System.getProperty('java.home')}/lib/jrt-fs.jar")
+    }
+}
+
 pmdMain {
     enabled = true
 }

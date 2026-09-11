@@ -93,12 +93,7 @@
     <rule ref="category/java/performance.xml/OptimizableToArrayCall" />
     <rule ref="category/java/performance.xml/ConsecutiveAppendsShouldReuse" />
     <rule ref="category/java/performance.xml/InefficientStringBuffering" />
-    <rule ref="category/java/performance.xml/BigIntegerInstantiation">
-        <properties>
-            <!-- Ignore in tests -->
-            <property name="violationSuppressXPath" value="//ClassDeclaration['.*/src/test/java/.*']"/>
-        </properties>
-    </rule>
+    <rule ref="category/java/performance.xml/BigIntegerInstantiation" />
 
 
     <rule ref="category/java/multithreading.xml/AvoidThreadGroup" />
