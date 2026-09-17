@@ -31,13 +31,13 @@ import org.apache.ignite.example.streaming.pojo.Trade;
 import org.apache.ignite.table.DataStreamerOptions;
 import org.apache.ignite.table.DataStreamerReceiver;
 import org.apache.ignite.table.DataStreamerReceiverContext;
+import org.apache.ignite.table.DataStreamerReceiverDescriptor;
 import org.apache.ignite.table.DataStreamerTarget;
-import org.apache.ignite.table.ReceiverDescriptor;
 import org.apache.ignite.table.RecordView;
 
 /**
  * This example demonstrates the usage of the
- * {@link DataStreamerTarget#streamData(Publisher, Function, Function, ReceiverDescriptor, Subscriber, DataStreamerOptions, Object)} API
+ * {@link DataStreamerTarget#streamData(Publisher, DataStreamerReceiverDescriptor, Function, Function, Object, Subscriber, DataStreamerOptions)} API
  * for stream processing of the trades data read from the file.
  *
  * <p>Find instructions on how to run the example in the README.md file located in the "examples" directory root.
@@ -150,13 +150,13 @@ public class ReceiverStreamProcessingExample {
 
                 System.out.println("\nConfiguring data streamer...");
 
-                ReceiverDescriptor<Object> receiver = ReceiverDescriptor.builder(TradeProcessingReceiver.class)
+                var receiver = DataStreamerReceiverDescriptor.builder(TradeProcessingReceiver.class)
                         .units(new DeploymentUnit(DEPLOYMENT_UNIT_NAME, DEPLOYMENT_UNIT_VERSION))
                         .build();
 
                 Function<String, Account> keyFunc = trade -> new Account(Integer.parseInt(trade.substring(5, 9)));
 
-                streamerFut = accountView.streamData(publisher, keyFunc, t -> t, receiver, null, null, null);
+                streamerFut = accountView.streamData(publisher, receiver, keyFunc, t -> t, null, null, null);
 
                 //--------------------------------------------------------------------------------------
                 //
