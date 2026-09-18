@@ -37,7 +37,8 @@ import org.apache.ignite.table.RecordView;
 
 /**
  * This example demonstrates the usage of the
- * {@link DataStreamerTarget#streamData(Publisher, DataStreamerReceiverDescriptor, Function, Function, Object, Subscriber, DataStreamerOptions)} API
+ * {@link DataStreamerTarget#streamData(Publisher, DataStreamerReceiverDescriptor, Function, Function, Object,
+ * Subscriber, DataStreamerOptions)} API
  * for stream processing of the trades data read from the file.
  *
  * <p>Find instructions on how to run the example in the README.md file located in the "examples" directory root.
@@ -156,7 +157,15 @@ public class ReceiverStreamProcessingExample {
 
                 Function<String, Account> keyFunc = trade -> new Account(Integer.parseInt(trade.substring(5, 9)));
 
-                streamerFut = accountView.streamData(publisher, receiver, keyFunc, t -> t, null, null, null);
+                streamerFut = accountView.streamData(
+                        publisher,
+                        receiver,
+                        keyFunc,
+                        t -> t,
+                        null,
+                        null,
+                        null
+                );
 
                 //--------------------------------------------------------------------------------------
                 //

@@ -35,7 +35,8 @@ import org.apache.ignite.table.RecordView;
 
 /**
  * This example demonstrates the usage of the
- * {@link DataStreamerTarget#streamData(Publisher, DataStreamerReceiverDescriptor, Function, Function, Object, Subscriber, DataStreamerOptions)} API
+ * {@link DataStreamerTarget#streamData(Publisher, DataStreamerReceiverDescriptor, Function, Function, Object,
+ * Subscriber, DataStreamerOptions)} API
  * for stream processing of the trade data and updating account data in the table.
  *
  * <p>Find instructions on how to run the example in the README.md file located in the "examples" directory root.
