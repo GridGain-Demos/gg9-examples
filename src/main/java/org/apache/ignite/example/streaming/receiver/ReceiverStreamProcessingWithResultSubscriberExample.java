@@ -28,13 +28,14 @@ import org.apache.ignite.example.streaming.pojo.Trade;
 import org.apache.ignite.table.DataStreamerOptions;
 import org.apache.ignite.table.DataStreamerReceiver;
 import org.apache.ignite.table.DataStreamerReceiverContext;
+import org.apache.ignite.table.DataStreamerReceiverDescriptor;
 import org.apache.ignite.table.DataStreamerTarget;
-import org.apache.ignite.table.ReceiverDescriptor;
 import org.apache.ignite.table.RecordView;
 
 /**
  * This example demonstrates the usage of the
- * {@link DataStreamerTarget#streamData(Publisher, Function, Function, ReceiverDescriptor, Subscriber, DataStreamerOptions, Object)} API
+ * {@link DataStreamerTarget#streamData(Publisher, DataStreamerReceiverDescriptor, Function, Function, Object,
+ * Subscriber, DataStreamerOptions)} API
  * for stream processing of the trade data and receiving processing results.
  *
  * <p>Find instructions on how to run the example in the README.md file located in the "examples" directory root.
@@ -156,7 +157,7 @@ public class ReceiverStreamProcessingWithResultSubscriberExample {
 
                 Function<Trade, byte[]> payloadFunc = Trade::toByteArray;
 
-                ReceiverDescriptor<Object> receiver = ReceiverDescriptor.builder(TradeProcessingReceiver.class)
+                var receiver = DataStreamerReceiverDescriptor.builder(TradeProcessingReceiver.class)
                         .units(new DeploymentUnit(DEPLOYMENT_UNIT_NAME, DEPLOYMENT_UNIT_VERSION))
                         .build();
 
@@ -168,12 +169,12 @@ public class ReceiverStreamProcessingWithResultSubscriberExample {
 
                 streamerFut = view.streamData(
                         publisher,
+                        receiver,
                         keyFunc,
                         payloadFunc,
-                        receiver,
+                        null,
                         resultSubscriber,
-                        options,
-                        null
+                        options
                 );
 
                 //--------------------------------------------------------------------------------------
