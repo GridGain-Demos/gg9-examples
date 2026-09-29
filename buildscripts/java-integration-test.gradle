@@ -13,7 +13,6 @@ apply plugin: 'jacoco'
 testing {
     suites {
         integrationTest(JvmTestSuite) {
-            testType = TestSuiteType.INTEGRATION_TEST
             useJUnitJupiter()
 
             dependencies {
@@ -84,5 +83,5 @@ tasks.register('jacocoIntegrationTestReport', JacocoReport) {
 }
 
 spotbugsIntegrationTest {
-    enabled(false)
+    enabled = false
 }

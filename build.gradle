@@ -130,7 +130,6 @@ dependencies {
     integrationTestImplementation libs.gridgain.page.memory
     integrationTestImplementation libs.gridgain.network
     integrationTestImplementation libs.gridgain.storage.api
-    integrationTestImplementation libs.gridgain.storage.rocksdb
     integrationTestImplementation libs.gridgain.configuration
     integrationTestImplementation libs.hamcrest.core
     integrationTestImplementation libs.jetbrains.annotations

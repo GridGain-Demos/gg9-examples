@@ -174,5 +174,5 @@ spotbugsMain.finalizedBy(reportSpotbugsViolations)
 
 
 spotbugsTest {
-    enabled(false)
+    enabled = false
 }
