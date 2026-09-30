@@ -27,7 +27,7 @@ pmdTestFixtures {
 }
 
 spotbugsTestFixtures {
-    enabled(false)
+    enabled = false
 }
 
 components.java.withVariantsFromConfiguration(configurations.testFixturesApiElements) { skip() }

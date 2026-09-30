@@ -7,6 +7,9 @@ This project contains code examples for GridGain 9.
 Examples are shipped as a Gradle module, so to start running you simply need
 to import the provided `build.gradle` file into your favourite IDE.
 
+The build runs on Gradle 9 and needs JDK 17 or newer; GridGain 9.2 and later need JDK 21.
+To build against GridGain 9.1.x on JDK 11, use the `9.1-main` branch.
+
 To run tests you need to provide a valid gridgain licence.
 To do that edit the file `$HOME/gradle.properties` adding the following content:
 
