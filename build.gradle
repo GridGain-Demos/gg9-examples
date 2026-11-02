@@ -96,7 +96,11 @@ tasks.withType(Test).configureEach {
 }
 
 repositories {
-    mavenLocal()
+    mavenLocal {
+        content {
+            includeGroup 'org.gridgain'
+        }
+    }
     maven {
         url = uri('https://repository.apache.org/snapshots')
     }
